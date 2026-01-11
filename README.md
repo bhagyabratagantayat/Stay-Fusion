@@ -1,0 +1,1 @@
+Stay Fusion – A full-stack Airbnb-inspired booking platform featuring property listings, search & filtering, user authentication, and booking management, built to demonstrate end-to-end web development skills.
