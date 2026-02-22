@@ -20,16 +20,16 @@ app.engine("ejs", ejsMate);
 // const port = 3000;
 // const bodyParser = require("body-parser");
 
-const MONGIODB_URI = "mongodb://127.0.0.1:27017/stayfusion";
+const MONGODB_URI = "mongodb://127.0.0.1:27017/stayfusion";
 
 connectToDatabase()
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
 
-  async function connectToDatabase() {
-    await mongoose.connect(MONGIODB_URI);
-  }
+async function connectToDatabase() {
+  await mongoose.connect(MONGODB_URI);
+}
 
 // async function connectToDatabase() {
 //   try {
@@ -50,8 +50,7 @@ connectToDatabase()
 // app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  // res.render('index', { //title: 'Home Page' });
-  res.send("Welcome to the Home Page");
+  res.redirect("/listings");
 });
 
 // app.get("/listings", async (req, res) => {
@@ -70,48 +69,79 @@ app.get("/", (req, res) => {
 
 // });
 
+// Index route with Search, Filter & Pagination
 app.get("/listings", async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index.ejs", {allListings });
+  let { q, type, status, page = 1 } = req.query;
+  const limit = 9; // Listings per page
+  const skip = (page - 1) * limit;
+
+  let query = {};
+  if (q) {
+    query.$or = [
+      { title: { $regex: q, $options: "i" } },
+      { location: { $regex: q, $options: "i" } }
+    ];
+  }
+  if (type) query.propertyType = type;
+  if (status) query.status = status;
+
+  const allListings = await Listing.find(query).skip(skip).limit(limit);
+  const totalListings = await Listing.countDocuments(query);
+  const totalPages = Math.ceil(totalListings / limit);
+
+  res.render("listings/index.ejs", {
+    allListings,
+    currentPage: parseInt(page),
+    totalPages,
+    searchQuery: q || "",
+    activeType: type || "",
+    activeStatus: status || ""
+  });
 });
 
-
-//new listing
+// New listing page
 app.get("/listings/new", (req, res) => {
   res.render("listings/new");
 });
 
-
-
-//show individual listing details
-//show route
+// Show individual listing details
 app.get("/listings/:id", async (req, res) => {
-    let { id } = req.params;
-   const listing = await Listing.findById(id);
-   res.render("listings/show.ejs", { listing });
-
+  let { id } = req.params;
+  const listing = await Listing.findById(id);
+  res.render("listings/show.ejs", { listing });
 });
 
-
-//create route
+// Create route
 app.post("/listings", async (req, res) => {
-  const newListing = new Listing(req.body.listing);
+  const listingData = req.body.listing;
+
+  // Handle multi-image input if provided as a comma-separated string
+  if (typeof listingData.images === 'string') {
+    listingData.images = listingData.images.split(",").map(img => img.trim()).filter(img => img !== "");
+  }
+
+  const newListing = new Listing(listingData);
   await newListing.save();
   res.redirect(`/listings/${newListing._id}`);
 });
 
-
-//edit route
+// Edit route
 app.get("/listings/:id/edit", async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
   res.render("listings/edit.ejs", { listing });
 });
 
-//update route
+// Update route
 app.put("/listings/:id", async (req, res) => {
   const { id } = req.params;
-  const updatedListing = await Listing.findByIdAndUpdate(id, req.body.listing, { new: true });
+  const listingData = req.body.listing;
+
+  if (typeof listingData.images === 'string') {
+    listingData.images = listingData.images.split(",").map(img => img.trim()).filter(img => img !== "");
+  }
+
+  const updatedListing = await Listing.findByIdAndUpdate(id, listingData, { new: true });
   res.redirect(`/listings/${updatedListing._id}`);
 });
 
@@ -121,7 +151,7 @@ app.delete("/listings/:id", async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id);
   res.redirect("/listings");
-});  
+});
 
 
 app.listen(port, () => {

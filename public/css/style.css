@@ -4,10 +4,12 @@
 .navbar {
   height: 5rem;
 }
+
 .fa-compass {
   font-size: 2rem;
   color: #ff5733;
 }
+
 .nav-link {
   color: #222222 !important;
 }
@@ -18,6 +20,7 @@
   text-decoration: none;
   color: #555555;
 }
+
 .f-info-links a:hover {
   text-decoration: underline;
 }
@@ -32,6 +35,7 @@
   align-items: center;
 }
 
+
 .f-info-links,
 .f-info-socials {
   width: 100%;
@@ -42,7 +46,124 @@
   margin-right: 0.5rem;
 }
 
+
 .f-info-socials a {
   font-size: 1.2rem;
   margin-left: 1rem;
+}
+
+/* Listing Card Styles */
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem;
+}
+
+.card-img-top {
+  border-radius: 1rem !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+.card-body {
+  padding: 0 !important;
+}
+
+.card-text b {
+  font-weight: 600 !important;
+}
+
+.listing-link {
+  text-decoration: none;
+}
+
+/* Card Hover Effect */
+.card-img-overlay {
+  opacity: 0;
+}
+
+.card-img-overlay:hover {
+  opacity: 0.2;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* Filters */
+#filters {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.filter {
+  text-align: center;
+  margin-right: 2rem;
+  margin-top: 2rem;
+  opacity: 0.7;
+}
+
+.filter:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.filter p {
+  font-size: 0.8rem;
+}
+
+.active-filter {
+  opacity: 1;
+  border-bottom: 2px solid black;
+}
+
+.filter-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Search Bar */
+.search-input {
+  border-radius: 25px !important;
+  padding: 0.5rem 1.5rem !important;
+}
+
+.btn-search {
+  background-color: #fe424d !important;
+  color: white !important;
+  border-radius: 25px !important;
+  padding: 0 1rem !important;
+}
+
+/* Status Badge */
+.status-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.status-badge.available {
+  background-color: #28a745;
+}
+
+.status-badge.sold {
+  background-color: #dc3545;
+}
+
+.status-badge.rented {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.pagination .page-link {
+  color: #fe424d;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #fe424d;
+  border-color: #fe424d;
 }

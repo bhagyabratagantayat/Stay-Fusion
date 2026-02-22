@@ -7,17 +7,27 @@ const listingSchema = new Schema({
     description: { type: String, required: true },
     price: { type: Number, required: true },
     location: { type: String, required: true },
-
+    country: { type: String, required: true },
     images: {
         type: [String],
-        set: (v) =>
-        v.length === 0
-            ? ["https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=1174&auto=format&fit=crop"]
-            : v,
         default: ["https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=1174&auto=format&fit=crop"]
     },
-
-    country: { type: String, required: true },
+    propertyType: {
+        type: String,
+        enum: ["House", "Apartment", "Villa", "Cabin", "Castle", "Other"],
+        default: "House"
+    },
+    status: {
+        type: String,
+        enum: ["Available", "Sold", "Rented"],
+        default: "Available"
+    },
+    bedrooms: { type: Number, default: 0 },
+    bathrooms: { type: Number, default: 0 },
+    amenities: {
+        type: [String],
+        default: []
+    }
 });
 
 

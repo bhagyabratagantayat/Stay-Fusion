@@ -11,7 +11,19 @@ async function connectToDatabase() {
 
 const initDB = async () => {
   await Listing.deleteMany({});
-  await Listing.insertMany(database.data);
+
+  // Map old data structure to new schema
+  const newData = database.data.map((obj) => ({
+    ...obj,
+    images: [obj.image.url], // Map image object url to images array
+    propertyType: "House",
+    status: "Available",
+    bedrooms: Math.floor(Math.random() * 5) + 1,
+    bathrooms: Math.floor(Math.random() * 3) + 1,
+    amenities: ["Wifi", "AC", "Kitchen"]
+  }));
+
+  await Listing.insertMany(newData);
   console.log("Database initialized with sample data.");
 };
 
