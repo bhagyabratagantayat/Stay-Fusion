@@ -1,11 +1,12 @@
+require("dotenv").config({ path: "../.env" });
 const mongoose = require("mongoose");
-const database = require("./data.js"); // your sampleListings file
+const database = require("./data.js");
 const Listing = require("../models/listing.js");
 
-const MONGODB_URI = "mongodb://127.0.0.1:27017/stayfusion";
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/stayfusion";
 
 async function connectToDatabase() {
-  await mongoose.connect(MONGODB_URI);
+  await mongoose.connect(dbUrl);
   console.log("Connected to MongoDB");
 }
 
@@ -29,6 +30,7 @@ const initDB = async () => {
 
 connectToDatabase()
   .then(initDB)
+  .then(() => mongoose.connection.close())
   .catch((err) => {
     console.error("MongoDB connection error:", err);
   });
