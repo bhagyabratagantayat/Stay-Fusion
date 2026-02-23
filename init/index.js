@@ -1,36 +1,37 @@
-require("dotenv").config({ path: "../.env" });
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 const mongoose = require("mongoose");
-const database = require("./data.js");
-const Listing = require("../models/listing.js");
+const Listing = require("../models/listing");
+const { data: sampleListings } = require("./data");
 
-const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/stayfusion";
+async function initDB() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ DB Connected");
 
-async function connectToDatabase() {
-  await mongoose.connect(dbUrl);
-  console.log("Connected to MongoDB");
+    // Delete old data (optional)
+    await Listing.deleteMany({});
+    console.log("🗑 Old data deleted");
+
+    // Map data to match schema (convert image object to images array)
+    const formattedListings = sampleListings.map((obj) => ({
+      ...obj,
+      images: [obj.image.url],
+      propertyType: "House",
+      status: "Available",
+      bedrooms: Math.floor(Math.random() * 5) + 1,
+      bathrooms: Math.floor(Math.random() * 3) + 1,
+      amenities: ["Wifi", "AC", "Kitchen"]
+    }));
+
+    // Insert sample data
+    await Listing.insertMany(formattedListings);
+    console.log("🚀 Sample data inserted");
+
+    mongoose.connection.close();
+  } catch (err) {
+    console.log("❌ Error:", err);
+  }
 }
 
-const initDB = async () => {
-  await Listing.deleteMany({});
-
-  // Map old data structure to new schema
-  const newData = database.data.map((obj) => ({
-    ...obj,
-    images: [obj.image.url], // Map image object url to images array
-    propertyType: "House",
-    status: "Available",
-    bedrooms: Math.floor(Math.random() * 5) + 1,
-    bathrooms: Math.floor(Math.random() * 3) + 1,
-    amenities: ["Wifi", "AC", "Kitchen"]
-  }));
-
-  await Listing.insertMany(newData);
-  console.log("Database initialized with sample data.");
-};
-
-connectToDatabase()
-  .then(initDB)
-  .then(() => mongoose.connection.close())
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-  });
+initDB();
