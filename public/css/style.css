@@ -2,7 +2,7 @@
     background-color: pink;
 } */
 .navbar {
-  height: 5rem;
+  min-height: 5rem;
 }
 
 .fa-compass {
@@ -28,7 +28,8 @@
 .f-info {
   text-align: center;
   display: flex;
-  height: 8rem;
+  min-height: 8rem;
+  padding: 2rem 1rem;
   background-color: white;
   justify-content: center;
   flex-wrap: wrap;
@@ -173,4 +174,62 @@
 .pagination .page-item.active .page-link {
   background-color: #fe424d;
   border-color: #fe424d;
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 768px) {
+  #filters {
+    margin-top: 1rem;
+  }
+
+  .filter {
+    margin-right: 1.5rem;
+  }
+
+  .filter p {
+    font-size: 0.7rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .f-info {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .f-info-links {
+    margin-bottom: 1rem;
+  }
+
+  .show-img {
+    height: 20rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .search-input {
+    width: 100% !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn-search {
+    width: 100% !important;
+    padding: 0.5rem !important;
+  }
+
+  .show-img {
+    height: 15rem !important;
+  }
+
+  .btns {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btns a,
+  .btns button {
+    width: 100%;
+  }
 }
