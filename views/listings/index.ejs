@@ -54,11 +54,13 @@
         <div class="ms-auto d-flex">
             <div class="filter <%= locals.activeStatus === 'Available' ? 'active-filter' : '' %>">
                 <a href="/listings?status=Available" class="filter-link">
+                    <div><img src="/assets/available.png" alt="Available" class="filter-img"></div>
                     <p>Available</p>
                 </a>
             </div>
             <div class="filter <%= locals.activeStatus === 'Sold' ? 'active-filter' : '' %>">
                 <a href="/listings?status=Sold" class="filter-link">
+                    <div><img src="/assets/sold.png" alt="Sold" class="filter-img"></div>
                     <p>Sold</p>
                 </a>
             </div>

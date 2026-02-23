@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: stay-fusion
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: ATLASDB_URL
+        sync: false # Set this in the Render dashboard

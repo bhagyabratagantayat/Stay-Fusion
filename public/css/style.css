@@ -108,6 +108,13 @@
 
 .filter p {
   font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.filter-img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
 }
 
 .active-filter {
